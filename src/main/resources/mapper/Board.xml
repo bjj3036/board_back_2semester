@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hs.kr.dgsw.board_back.domain.BoardMapper">
+
+    <select id="findAll" resultType="HashMap">
+        select id, board_name, board_desc
+        from board
+    </select>
+
+    <select id="findById" parameterType="Long" resultType="HashMap">
+        select b.id, board_name, board_desc, ceil(count(p.id) / 10) as max_page
+        from board b
+                 left join post p on b.id = p.board
+        where b.id = #{id}
+        group by b.id;
+    </select>
+
+    <!--<insert id="add" parameterType="kr.hs.dgsw.baejunjae.shoppingmall_back.domain.Attach">-->
+    <!--insert into attach( filename, filepath)-->
+    <!--values(#{filename}, #{filepath})-->
+    <!--<selectKey keyProperty="id" resultType="Long">-->
+    <!--select last_insert_id()-->
+    <!--</selectKey>-->
+    <!--</insert>-->
+
+    <!--<update id="modify" parameterType="kr.hs.dgsw.baejunjae.shoppingmall_back.domain.Attach">-->
+    <!--update attach-->
+    <!--set filename=#{filename}, filepath=#{filepath}-->
+    <!--where id=#{id}-->
+    <!--</update>-->
+
+    <!--<delete id="deleteById" parameterType="Long">-->
+    <!--delete from attach where id=#{id}-->
+    <!--</delete>-->
+
+</mapper>

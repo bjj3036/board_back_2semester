@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hs.kr.dgsw.board_back.domain.PostMapper">
+
+
+    <insert id="insertPost" parameterType="hs.kr.dgsw.board_back.domain.Post">
+        insert into post(title, content, writer, board)
+        values(#{title}, #{content}, #{writer}, #{board})
+        <selectKey keyProperty="id" resultType="Long">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <select id="orderByTime" resultType="HashMap" parameterType="hs.kr.dgsw.board_back.domain.SearchOption">
+        select id, title, recommend, views, writer, created
+        from post
+        where board = #{board}
+        order by created desc, id desc
+        limit #{page}, 10;
+    </select>
+
+    <select id="orderByView" resultType="HashMap" parameterType="hs.kr.dgsw.board_back.domain.SearchOption">
+        select id, title, recommend, views, writer, created
+        from post
+        where board = #{board}
+        order by views desc, id desc
+        limit #{page}, 10;
+    </select>
+
+    <select id="orderByRecommend" resultType="HashMap" parameterType="hs.kr.dgsw.board_back.domain.SearchOption">
+        select id, title, recommend, views, writer, created
+        from post
+        where board = #{board}
+        order by recommend desc, id desc
+        limit #{page}, 10;
+    </select>
+
+    <select id="loadRecent" resultType="HashMap">
+        select id, title, recommend, views, writer, created
+        from post
+        order by created desc, id desc
+        limit 0, 6;
+    </select>
+    <select id="getById" parameterType="Long" resultType="HashMap">
+        select id, title, content, recommend, views, writer, created
+        from post
+        where id = #{id}
+    </select>
+
+    <update id="viewAdd" parameterType="Long">
+        update post
+        set views = (1 + views)
+        where id = #{id}
+    </update>
+
+    <update id="recommendPost" parameterType="Long">
+        update post
+        set recommend = (1 + recommend)
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete
+        from post
+        where id = #{id}
+    </delete>
+    <update id="updatePost" parameterType="hs.kr.dgsw.board_back.domain.Post">
+    update post
+    set title=#{title}, content=#{content}
+    where id=#{id}
+    </update>
+
+    <!--<delete id="deleteById" parameterType="Long">-->
+    <!--delete from attach where id=#{id}-->
+    <!--</delete>-->
+
+</mapper>

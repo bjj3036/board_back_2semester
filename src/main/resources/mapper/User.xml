@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hs.kr.dgsw.board_back.domain.UserMapper">
+
+    <select id="loginInfo" resultType="HashMap" parameterType="String">
+        select id, password
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="getUserInfo" resultType="HashMap" parameterType="String">
+        select user.*, sum(post.recommend) 'total_recommend', count(post.id) as 'total_post'
+        from user
+                 left join post on user.id = post.writer
+        where user.id = #{id}
+        group by user.id;
+    </select>
+
+    <insert id="add" parameterType="hs.kr.dgsw.board_back.domain.User">
+        insert into user( id, password, username, gender, age, profile_image)
+        values(#{id}, #{password},#{username},#{gender},#{age},#{profileImage})
+    </insert>
+
+    <update id="updateUser" parameterType="hs.kr.dgsw.board_back.domain.User">
+    update user
+    set password=#{password}, username=#{username}, gender=#{gender}, age=#{age}, profile_image=#{profileImage}
+    where id=#{id}
+    </update>
+
+    <!--<delete id="deleteById" parameterType="Long">-->
+    <!--delete from attach where id=#{id}-->
+    <!--</delete>-->
+
+</mapper>
